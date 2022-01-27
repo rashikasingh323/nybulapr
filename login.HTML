@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title>Javascript Quiz App</title>
+<style>
+.title{
+  text-align: center;
+  margin-top: 25px;
+}
+
+.form{
+    margin: auto;
+    max-width:400px;
+    text-align: center
+}
+
+input[type='submit'], button, [aria-label]{
+  cursor: pointer;
+}
+#edit-box{
+  display: none;
+  max-width: 80%;
+  margin: auto;
+  margin-top: 10px;
+}
+
+td{
+    background-color: aliceblue;
+    padding-right: 10px;
+    text-align: left;
+}
+
+.to-do{
+    background: transparent !important;
+}
+
+</style>
+</head>
+
+<body>
+	<div class="title">
+        <h1> create quiz</h1>
+        
+    </div>
+    <div class="form">
+        <p> <h3> subject name: </h3></p>
+        <form action="javascript:void(0);" method="post"
+        onsubmit="app.Add()">
+        <input type="text" id="add-question" placeholder="enter-subject">
+        <input type="submit" value="Add" class="btn btn-info
+        ">
+
+    </form>
+    <table>
+        <tr class="to-ask">
+            <th><h3> questions to-ask:</h3></th>
+        
+        </tr>
+      <tbody id="questions"></tbody>
+    </table>
+    </div>
+
+    <div id="edit-box" role="aria-hidden">
+        <form action="javascript:void(0);" method="post"
+        id="save-edit">
+        <input type="text" id="edit-que" placeholder="input-questions">
+        <input type="submit" value="save" class="btn btn-success">
+        <a onclick="CloseInput()" aria-label="Close">&#10006;</a>
+    </form>
+			
+<script>
+var app = new function() {
+  this.el = document.getElementById('questions');
+
+  this.questions = [];
+
+  
+  
+  this.FetchAll = function() {
+    var data = '';
+
+    if (this.questions.length > 0) {
+      for (i = 0; i < this.questions.length; i++) {
+        data += '<tr>';
+        data += '<td>'+(i+1)+". " + this.questions[i] + '</td>';
+        data += '<td><button onclick="app.Edit(' + i + ')"  class="btn btn-warning">Edit</button></td>';
+        data += '<td><button onclick="app.Delete(' + i + ')"  class="btn btn-danger">Delete</button></td>';
+        data += '</tr>';
+      }
+    }
+
+    this.Count(this.questions.length);
+    return this.el.innerHTML = data;
+  };
+
+  this.Add = function () {
+    el = document.getElementById('add-questions');
+    // Get the value
+    var question = el.value;
+
+    if (question) {
+      // Add the new value
+      this.questions.push(question.trim());
+      // Reset input value
+      el.value = '';
+      // Dislay the new list
+      this.FetchAll();
+    }
+  };
+
+  this.Edit = function (item) {
+    var el = document.getElementById('edit-questions');
+    // Display value in the field
+    el.value = this.questions[item];
+    // Display fields
+    document.getElementById('edit-box').style.display = 'block';
+    self = this;
+
+    document.getElementById('save-edit').onsubmit = function() {
+      // Get value
+      var question = el.value;
+
+      if (question) {
+        // Edit value
+        self.tasks.splice(item, 1, question.trim());
+        // Display the new list
+        self.FetchAll();
+        // Hide fields
+        CloseInput();
+      }
+    }
+  };
+
+  this.Delete = function (item) {
+    // Delete the current row
+    this.questions.splice(item, 1);
+    // Display the new list
+    this.FetchAll();
+  };
+
+  this.Count = function(data) {
+    var el   = document.getElementById('counter');
+    var name = 'questions';
+
+    if (data) {
+        if(data ==1){
+            name = 'questionsquestions'
+        }
+      el.innerHTML = data + ' ' + name ;
+    } 
+    else {
+      el.innerHTML = 'No ' + name;
+    }
+  };
+  
+}
+
+app.FetchAll();
+
+function CloseInput() {
+  document.getElementById('edit-box').style.display = 'none';
+}
+
+</script>
+</body>
+</html>
